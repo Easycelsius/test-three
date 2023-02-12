@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script>
+			// setup scene, camera and renderer
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			// create house shape
+			var shape = new THREE.Shape();
+			shape.moveTo(0, 0);
+			shape.lineTo(2, 0);
+			shape.lineTo(2, 2);
+			shape.lineTo(1, 3);
+			shape.lineTo(0, 2);
+			shape.lineTo(0, 0);
+
+			// extrude the shape to create a 3D object
+			var extrudeSettings = {
+			steps: 2,
+			depth: 2,
+			bevelEnabled: true,
+			bevelThickness: 0.5,
+			bevelSize: 0.5,
+			bevelSegments: 1
+			};
+			var houseGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+			var houseMaterial = new THREE.MeshPhongMaterial({ color: 0xA682F9 });
+			var house = new THREE.Mesh(houseGeometry, houseMaterial);
+
+			// add house to the scene
+			scene.add(house);
+
+			// add a light source
+			var light = new THREE.PointLight(0xffffff, 1, 100);
+			light.position.set(0, 0, 10);
+			scene.add(light);
+
+			// position camera
+			camera.position.z = 10;
+
+			// animation loop
+			function animate() {
+			requestAnimationFrame(animate);
+			house.rotation.x += 0.01;
+			house.rotation.y += 0.01;
+			renderer.render(scene, camera);
+			}
+
+			animate();
+		</script>
+	</body>
+</html>
